@@ -8,6 +8,14 @@
   <name>MyJavaProject Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <dependencies>
+
+    <!-- MySQL 连接驱动依赖 -->
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.1.30</version>
+    </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
