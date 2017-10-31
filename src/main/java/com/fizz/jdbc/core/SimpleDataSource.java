@@ -27,7 +27,7 @@ public class SimpleDataSource implements DataSource {
 
     static {
         Properties prop =  new Properties();
-        InputStream in = SimpleDataSource.class.getClassLoader().getResourceAsStream( "jdbc/config/jdbc.properties" );
+        InputStream in = SimpleDataSource.class.getClassLoader().getResourceAsStream("config/jdbc/jdbc.properties");
         try {
             prop.load(in);
             mysql_driverName = prop.getProperty("mysql.driverName");
