@@ -1,4 +1,4 @@
-package com.fizz.jdbc.model;
+package com.fizz.jdbc.entity;
 
 public class User {
 

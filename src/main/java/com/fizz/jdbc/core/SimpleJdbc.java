@@ -47,10 +47,31 @@ public class SimpleJdbc implements JdbcOperation {
         return null;
     }
 
-    public boolean execute(String sql, Object[] params) throws SQLException {
+    public int sava(String sql, Object[] values) {
         Connection conn = getConnection(false);
         PreparedStatement stmt = null;
+        try {
+            stmt = createPreparedStatementPrimaryKey(conn, sql, values);
+            stmt.execute();
+            conn.commit();
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                int key = rs.getInt(0);
+                return key;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            free(stmt);
+            free(conn);
+        }
+        return -1;
+    }
+
+    public boolean execute(String sql, Object[] params) throws SQLException {
         boolean flag = false;
+        Connection conn = getConnection(false);
+        PreparedStatement stmt = null;
         try {
             stmt = createPreparedStatement(conn, sql, params);
             stmt.execute();
@@ -82,7 +103,7 @@ public class SimpleJdbc implements JdbcOperation {
                     stmt.setObject(j + 1, param[j]);
                 }
                 stmt.addBatch();
-                if (i % 1000 == 0) {
+                if (i % JdbcConf.batchSize == 0) {
                     stmt.executeBatch();
                     stmt.clearBatch();
                 }
@@ -101,7 +122,7 @@ public class SimpleJdbc implements JdbcOperation {
     }
 
     public int executeBatch(String sql) throws SQLException {
-        return executeBatch(sql, new ArrayList<Object[]>());
+        return executeBatch(sql, new ArrayList<>());
     }
 
     public ResultSet queryForResultSet(String sql, Object[] params) throws SQLException {
@@ -177,7 +198,7 @@ public class SimpleJdbc implements JdbcOperation {
         ResultSet rs = null;
         List<Object> list = null;
         try {
-            list = new ArrayList<Object>();
+            list = new ArrayList<>();
             stmt = createPreparedStatement(conn, sql, params);
             rs = stmt.executeQuery();
             while (rs.next()) {
@@ -193,8 +214,37 @@ public class SimpleJdbc implements JdbcOperation {
         return list;
     }
 
-    public List<?> queryForEntity(String sql,  Class<?> clazz) throws SQLException {
+    public List<?> queryForEntity(String sql, Class<?> clazz) throws SQLException {
         return queryForEntity(sql, new Object[] {}, clazz);
+    }
+
+    public List<?> queryForEntityBatch(String sql, Object[] params, int curPage, int pageSize, Class<?> clazz) throws SQLException {
+        Connection conn = getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Object> list = null;
+        try {
+            list = new ArrayList<Object>();
+            int start = (curPage-1) * pageSize;
+            int last = curPage * pageSize;
+            stmt = createPreparedStatementBatch(conn, sql, params, last);
+            rs = stmt.executeQuery();
+            rs.relative(start);
+            while (rs.next()) {
+                list.add(RowEntity.transToEntity(rs, clazz));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            free(rs);
+            free(stmt);
+            free(conn);
+        }
+        return list;
+    }
+
+    public List<?> queryForEntityBatch(String sql, int curPage, int pageSize, Class<?> clazz) throws SQLException {
+        return queryForEntityBatch(sql, new Object[] {}, curPage, pageSize, clazz);
     }
 
     public List<?> queryForBean(String sql, Object[] params, RowMapper<?> mapper) throws SQLException {
@@ -205,7 +255,7 @@ public class SimpleJdbc implements JdbcOperation {
         try {
             stmt = createPreparedStatement(conn, sql, params);
             rs = stmt.executeQuery();
-            list = new ArrayList<Object>();
+            list = new ArrayList<>();
             while (rs.next()) {
                 list.add(mapper.mapRow(rs));
             }
@@ -231,13 +281,13 @@ public class SimpleJdbc implements JdbcOperation {
             stmt = createPreparedStatement(conn, sql, params);
             rs = stmt.executeQuery();
 
-            List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+            List<Map<String, Object>> list = new ArrayList<>();
             Map<String, Object> map = null;
             ResultSetMetaData rsd = rs.getMetaData();
             int columnCount = rsd.getColumnCount();
 
             while (rs.next()) {
-                map = new HashMap<String, Object>(columnCount);
+                map = new HashMap<>(columnCount);
                 for (int i = 1; i <= columnCount; i++) {
                     map.put(rsd.getColumnName(i), rs.getObject(i));
                 }
@@ -263,6 +313,21 @@ public class SimpleJdbc implements JdbcOperation {
         PreparedStatement stmt = conn.prepareStatement(sql);
         for (int i = 0; i < params.length; i++)
             stmt.setObject(i + 1, params[i]);
+        return stmt;
+    }
+
+    protected PreparedStatement createPreparedStatementPrimaryKey(Connection conn, String sql, Object[] params) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        for (int i = 0; i < params.length; i++)
+            stmt.setObject(i + 1, params[i]);
+        return stmt;
+    }
+
+    protected PreparedStatement createPreparedStatementBatch(Connection conn, String sql, Object[] params, int size) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        for (int i = 0; i < params.length; i++)
+            stmt.setObject(i + 1, params[i]);
+        stmt.setMaxRows(size);
         return stmt;
     }
 

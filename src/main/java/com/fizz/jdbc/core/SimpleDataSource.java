@@ -16,51 +16,57 @@ import java.util.logging.Logger;
 
 public class SimpleDataSource implements DataSource {
 
-    private static int poolSize = 5;// 默认为5个
+//    private static int poolSize = 5;// 默认为5个
+//
+//    private static String mysql_driverName = "";
+//    private static String mysql_url = "";
+//    private static String mysql_user = "";
+//    private static String mysql_password = "";
 
-    private static String mysql_driverName = "";
-    private static String mysql_url = "";
-    private static String mysql_user = "";
-    private static String mysql_password = "";
-
-    private LinkedList<Connection> pool = new LinkedList<Connection>();
+    private LinkedList<Connection> pool = new LinkedList<>();
 
     static {
-        Properties prop =  new Properties();
-        InputStream in = SimpleDataSource.class.getClassLoader().getResourceAsStream("config/jdbc/jdbc.properties");
-        try {
-            prop.load(in);
-            mysql_driverName = prop.getProperty("mysql.driverName");
-            mysql_url = prop.getProperty("mysql.url");
-            mysql_user = prop.getProperty("mysql.user");
-            mysql_password = prop.getProperty("mysql.password");
-            poolSize = Integer.parseInt(prop.getProperty("poolSize"));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!JdbcConf.initStatus) {
+            InputStream in = SimpleDataSource.class.getClassLoader().getResourceAsStream("config/jdbc/jdbc.properties");
+            JdbcConf.init(in);
         }
     }
 
     public SimpleDataSource() {
-        this(mysql_driverName, mysql_url, mysql_user, mysql_password, poolSize);
+        this(JdbcConf.driverName, JdbcConf.url, JdbcConf.user, JdbcConf.password, JdbcConf.poolSize);
     }
 
     public SimpleDataSource(String driver, String url) {
-        this(driver, url, mysql_user, mysql_password, poolSize);
+        this(driver, url, JdbcConf.user, JdbcConf.password, JdbcConf.poolSize);
     }
 
     public SimpleDataSource(String url, String name, String pwd) {
-        this(mysql_driverName, url, name, pwd);
+        this(JdbcConf.driverName, url, name, pwd);
     }
 
     public SimpleDataSource(String driver, String url, String name, String pwd) {
-        this(driver, url, name, pwd, poolSize);
+        this(driver, url, name, pwd, JdbcConf.poolSize);
+    }
+
+    /**
+     * 初始化数据库连接配置
+     * @param in    连接参数资源文件
+     *              mysql.driverName: 驱动名称
+     *              mysql.url: 连接地址
+     *              mysql.user: 用户名
+     *              mysql.password: 密码
+     *              jdbc.pool.size: 连接池数量
+     *              jdbc.batch.size: 批量操作数量
+     */
+    public SimpleDataSource(InputStream in) {
+        JdbcConf.init(in);
     }
 
     @SuppressWarnings("static-access")
     public SimpleDataSource(String driver, String url, String name, String pwd, int poolSize) {
         try {
             Class.forName(driver);
-            this.poolSize = poolSize;
+            JdbcConf.poolSize = poolSize;
             if (poolSize <= 0) {
                 throw new RuntimeException("初始化池大小失败: " + poolSize);
             }
@@ -77,7 +83,7 @@ public class SimpleDataSource implements DataSource {
 
     /** 获取池大小 */
     public int getPoolSize() {
-        return poolSize;
+        return JdbcConf.poolSize;
     }
 
     /** 不支持日志操作 */

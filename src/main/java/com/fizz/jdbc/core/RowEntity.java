@@ -33,7 +33,7 @@ public class RowEntity {
     }
 
     private static Map<String, Class<?>> initEntityField(Class<?> clazz) {
-        Map<String, Class<?>> map = new HashMap<String, Class<?>>();
+        Map<String, Class<?>> map = new HashMap<>();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             map.put(field.getName(), field.getType());

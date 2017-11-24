@@ -1,8 +1,10 @@
 package com.fizz.jdbc.dao;
 
+import com.fizz.jdbc.core.JdbcOperation;
+
 import java.util.List;
 
-public interface BaseDao<T> {
+public interface BaseDao<T> extends JdbcOperation {
 
     /**
      * select功能
