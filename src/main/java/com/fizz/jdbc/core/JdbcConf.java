@@ -19,7 +19,7 @@ public class JdbcConf {
         try {
             prop.load(in);
             driverName = prop.getProperty("mysql.driverName", "com.mysql.jdbc.Driver");
-            url = prop.getProperty("mysql.url");
+            url = prop.getProperty("mysql.url", "");
             user = prop.getProperty("mysql.user", "root");
             password = prop.getProperty("mysql.password", "123456");
             poolSize = Integer.parseInt(prop.getProperty("jdbc.pool.size", "5"));
