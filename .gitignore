@@ -5,6 +5,3 @@ MyJavaProject.iml
 
 # sbteclipse plugin
 target
-
-#File
-src/test

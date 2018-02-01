@@ -18,7 +18,7 @@ public class Test {
         int  PORT  = 1990;
         String SERVICEID = "hv5TbliVk";
         int  status = -1 ;
-        String userTel="15304419861";
+        String userTel="13578923272";
         String smsContent="您本次上网密码为8900,欢迎使用!";
         final CMPPConnect connReq = new CMPPConnect();
         connReq.setSourceAddr(USER_NAME);
