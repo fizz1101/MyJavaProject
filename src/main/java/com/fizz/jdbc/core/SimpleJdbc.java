@@ -122,7 +122,7 @@ public class SimpleJdbc implements JdbcOperation {
     }
 
     public int executeBatch(String sql) throws SQLException {
-        return executeBatch(sql, new ArrayList<>());
+        return executeBatch(sql, new ArrayList<Object[]>());
     }
 
     public ResultSet queryForResultSet(String sql, Object[] params) throws SQLException {
