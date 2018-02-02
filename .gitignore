@@ -5,3 +5,4 @@ MyJavaProject.iml
 
 # sbteclipse plugin
 target
+classes
