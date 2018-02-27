@@ -10,6 +10,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.Security;
 
+/**
+ * AES加密工具类
+ */
 public class AESUtil {
 
     private static boolean initialized = false;
@@ -25,13 +28,13 @@ public class AESUtil {
      * @param key  加/解密要用的长度为16的字节数组（256位）密钥
      * @return  加密后的字节数组
      */
-    public static String AESEncode(String strMing, String key){
+    public static String AESEncrypt(String strMing, String key){
         String result = null;
         try{
             Cipher cipher = Cipher.getInstance(ALGORITHM_MODE_PKCS5);
             byte[] byteMing = strMing.getBytes();
             byte[] byteKey = getKeyByte(key, 16);
-            result = BaseEncode(cipher, byteMing, byteKey);
+            result = BaseEncrypt(cipher, byteMing, byteKey);
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -44,13 +47,13 @@ public class AESUtil {
      * @param key    加/解密要用的长度为16的字节数组（256位）密钥
      * @return  解密后的字符串
      */
-    public static String AESDecode(String strMi, String key){
+    public static String AESDecrypt(String strMi, String key){
         String result = null;
         try{
             Cipher cipher = Cipher.getInstance(ALGORITHM_MODE_PKCS5);
             byte[] byteMi = strMi.getBytes();
             byte[] byteKey = getKeyByte(key, 16);
-            result = BaseDecode(cipher, byteMi, byteKey);
+            result = BaseDecrypt(cipher, byteMi, byteKey);
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -73,14 +76,14 @@ public class AESUtil {
      * @param key  加/解密要用的长度为32的字节数组（256位）密钥
      * @return  加密后的字符串
      */
-    public static String AES256Encode(String str, String key){
+    public static String AES256Encrypt(String str, String key){
         initialize();
         String result = null;
         try{
             Cipher cipher = Cipher.getInstance(ALGORITHM_MODE_PKCS7, BOUNCYCASTLE);
             byte[] byteSrc = str.getBytes();
             byte[] byteKey = getKeyByte(key, 32);
-            result = BaseEncode(cipher, byteSrc, byteKey);
+            result = BaseEncrypt(cipher, byteSrc, byteKey);
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -93,14 +96,14 @@ public class AESUtil {
      * @param key    加/解密要用的长度为32的字节数组（256位）密钥
      * @return  解密后的字符串
      */
-    public static String AES256Decode(String strMi, String key){
+    public static String AES256Decrypt(String strMi, String key){
         initialize();
         String result = null;
         try{
             Cipher cipher = Cipher.getInstance(ALGORITHM_MODE_PKCS7, BOUNCYCASTLE);
             byte[] byteMi = strMi.getBytes();
             byte[] byteKey = getKeyByte(key, 32);
-            result = BaseDecode(cipher, byteMi, byteKey);
+            result = BaseDecrypt(cipher, byteMi, byteKey);
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -124,7 +127,7 @@ public class AESUtil {
      * @param key
      * @return
      */
-    private static String BaseEncode(Cipher cipher, byte[] src, byte[] key) {
+    private static String BaseEncrypt(Cipher cipher, byte[] src, byte[] key) {
         String result = null;
         try{
             SecretKeySpec keySpec = new SecretKeySpec(key, ALGORITHM); //生成加密解密需要的Key
@@ -144,7 +147,7 @@ public class AESUtil {
      * @param key
      * @return
      */
-    public static String BaseDecode(Cipher cipher, byte[] bytes, byte[] key){
+    public static String BaseDecrypt(Cipher cipher, byte[] bytes, byte[] key){
         initialize();
         String result = null;
         try{
@@ -231,7 +234,7 @@ public class AESUtil {
     public static void main(String[] args) {
         String strMing = "fizz";
         String key = "2IBtBXdrqC3kCBs4gaceL7nl2nnFadQv";
-        System.out.println(AESEncode(strMing, key));
+        System.out.println(AESEncrypt(strMing, key));
     }
 
 }

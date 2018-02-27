@@ -23,7 +23,7 @@ public class UDPServer {
             System.out.println(str_receive);
             //数据发动到客户端的9000端口
             String str_send = "Hello UDPclient";
-            DatagramPacket dp_send= new DatagramPacket(str_send.getBytes(),str_send.length(),dp_receive.getAddress(),9000);
+            DatagramPacket dp_send= new DatagramPacket(str_send.getBytes(),str_send.length(),dp_receive.getAddress(),dp_receive.getPort());
             ds.send(dp_send);
             //由于dp_receive在接收了数据之后，其内部消息长度值会变为实际接收的消息的字节数，
             //所以这里要将dp_receive的内部消息长度重新置为1024

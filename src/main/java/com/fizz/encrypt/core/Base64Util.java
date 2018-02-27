@@ -1,9 +1,6 @@
 package com.fizz.encrypt.core;
 
-import org.apache.commons.codec.Charsets;
-
 import java.io.*;
-import java.nio.charset.Charset;
 import java.util.Base64;
 
 /**
@@ -327,30 +324,38 @@ public class Base64Util {
 
     /**
      * 功能：编码字符串(JDK1.8)
-     * @param strMing  源字符串
+     * @param byteMing  源字符数组
      * @return String
      */
-    public static String encodeByJDK(String strMing) {
+    public static String encodeByJDK(byte[] byteMing) {
         Base64.Encoder encoder = Base64.getEncoder();
-        byte[] b = strMing.getBytes();
-        return encoder.encodeToString(b);
+        return encoder.encodeToString(byteMing);
     }
 
     /**
      * 功能：解码字符串(JDK1.8)
-     * @param strMing 源字符串
+     * @param byteMi 源字符数组
      * @return String
      */
-    public static String decodeByJDK(String strMing) {
+    public static String decodeByJDK(byte[] byteMi) {
         Base64.Decoder decoder = Base64.getDecoder();
-        byte[] byteMing = strMing.getBytes();
-        byte[] byteMi = decoder.decode(byteMing);
+        byte[] byteMing = decoder.decode(byteMi);
         try {
-            return new String(byteMi, "UTF-8");
+            return new String(byteMing, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 功能：解码字符串(JDK1.8)
+     * @param byteMi 源字符数组
+     * @return String
+     */
+    public static byte[] decodeByJDK2(byte[] byteMi) {
+        Base64.Decoder decoder = Base64.getDecoder();
+        return decoder.decode(byteMi);
     }
 
 
@@ -358,7 +363,7 @@ public class Base64Util {
         String strMing = "fizz";
         System.out.println(encode(strMing));
         System.out.println(encodeByApache(strMing));
-        System.out.println(encodeByJDK(strMing));
+        System.out.println(encodeByJDK(strMing.getBytes()));
     }
 
 }
