@@ -10,16 +10,16 @@ public class Test {
 
     public static void main(String[] args) throws Exception {
         CMPP cmpp = new CMPP();
-        String  USER_NAME  = "122489";
-        String  PASSWORD  = "112233";
-        String  IP  = "112.35.10.164";
-        String  SRC  = "10657204002";
-        String  SP_ID  = "122489";
-        int  PORT  = 1990;
-        String SERVICEID = "hv5TbliVk";
+        String  USER_NAME  = "106179";
+        String  PASSWORD  = "U8G2YOZTSZ";
+        String  IP  = "27.221.101.32";
+        String  SRC  = "106179";
+        String  SP_ID  = "106179";
+        int  PORT  = 8855;
+        String SERVICEID = "";
         int  status = -1 ;
-        String userTel="13578923272";
-        String smsContent="您本次上网密码为8900,欢迎使用!";
+        String userTel="15067126450";
+        String smsContent="【山东电信】您本次上网验证码：6980。";
         final CMPPConnect connReq = new CMPPConnect();
         connReq.setSourceAddr(USER_NAME);
         connReq.setPassword(PASSWORD);

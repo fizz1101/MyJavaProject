@@ -8,7 +8,7 @@ public class UDPServer {
 
     public static void main(String[] args)throws IOException {
         //服务端在3000端口监听接收到的数据
-        DatagramSocket ds = new DatagramSocket(1813);
+        DatagramSocket ds = new DatagramSocket(515);
         //接收从客户端发送过来的数据
         byte[] buf = new byte[4096];
         DatagramPacket dp_receive = new DatagramPacket(buf, buf.length);

@@ -10,6 +10,7 @@
 
   <properties>
     <poi.version>3.13</poi.version>
+    <xdocreport.version>1.0.6</xdocreport.version>
   </properties>
 
   <dependencies>
@@ -37,6 +38,59 @@
       <artifactId>poi-ooxml-schemas</artifactId>
       <version>${poi.version}</version>
     </dependency>
+    <!--<dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>ooxml-schemas</artifactId>
+      <version>1.1</version>
+    </dependency>-->
+    <!-- xdocreport -->
+    <dependency>
+      <groupId>fr.opensagres.xdocreport</groupId>
+      <artifactId>org.apache.poi.xwpf.converter.core</artifactId>
+      <version>${xdocreport.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>fr.opensagres.xdocreport</groupId>
+      <artifactId>org.apache.poi.xwpf.converter.pdf</artifactId>
+      <version>${xdocreport.version}</version>
+    </dependency>
+    <!--没有该包的话,会有中文显示问题-->
+    <!--<dependency>
+      <groupId>com.lowagie</groupId>
+      <artifactId>itextasian</artifactId>
+      <version>1.5.2</version>
+    </dependency>-->
+
+    <!-- itext -->
+    <dependency>
+      <groupId>com.itextpdf</groupId>
+      <artifactId>itextpdf</artifactId>
+      <version>5.5.13</version>
+    </dependency>
+    <dependency>
+      <groupId>com.itextpdf.tool</groupId>
+      <artifactId>xmlworker</artifactId>
+      <version>5.5.13</version>
+    </dependency>
+    <dependency>
+      <groupId>com.itextpdf</groupId>
+      <artifactId>itext-asian</artifactId>
+      <version>5.2.0</version>
+    </dependency>
+
+    <!-- aspose -->
+    <!--<dependency>
+      <groupId>com.aspose</groupId>
+      <artifactId>aspose-words</artifactId>
+      <version>15.8.0</version>
+    </dependency>-->
+    <!--<dependency>
+      <groupId>com.aspose</groupId>
+      <artifactId>aspose-words</artifactId>
+      <version>20.2</version>
+      <type>pom</type>
+    </dependency>-->
+
     <dependency>
       <groupId>org.apache.xmlbeans</groupId>
       <artifactId>xmlbeans</artifactId>
@@ -105,4 +159,12 @@
           </plugin>
       </plugins>
   </build>
+
+  <distributionManagement>
+    <repository>
+      <id>public</id>
+      <name>Public Repositories</name>
+      <url>http:/192.168.1.20:8081/nexus/content/groups/public/</url>
+    </repository>
+  </distributionManagement>
 </project>

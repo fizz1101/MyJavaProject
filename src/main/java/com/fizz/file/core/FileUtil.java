@@ -303,4 +303,26 @@ public class FileUtil {
         }
     }*/
 
+    /**
+     * 关闭输入输出流
+     * @param is
+     * @param out
+     */
+    public static void close(InputStream is, OutputStream out) {
+        if (is != null) {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (out != null) {
+            try {
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
